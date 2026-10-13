@@ -22,15 +22,18 @@
 </section>
 
 <section class="stats-grid">
-  <article class="stat-card"><span class="stat-label">Day streak</span><strong>—</strong><span class="muted">Start your first quiz</span></article>
-  <article class="stat-card"><span class="stat-label">Daily accuracy</span><strong>—</strong><span class="muted">No attempts yet</span></article>
-  <article class="stat-card"><span class="stat-label">Weekly accuracy</span><strong>—</strong><span class="muted">No attempts yet</span></article>
+  <article class="stat-card"><span class="stat-label">Day streak</span><strong>{{ stats.streak }}</strong><span class="muted">{{ 'day' if stats.streak == 1 else 'days' }} in a row</span></article>
+  <article class="stat-card"><span class="stat-label">Daily accuracy</span><strong>{{ stats.daily_accuracy ~ '%' if stats.daily_accuracy is not none else '—' }}</strong><span class="muted">{{ 'Today so far' if stats.daily_accuracy is not none else 'Complete a quiz today' }}</span></article>
+  <article class="stat-card"><span class="stat-label">Weekly accuracy</span><strong>{{ stats.weekly_accuracy ~ '%' if stats.weekly_accuracy is not none else '—' }}</strong><span class="muted">{{ 'Last 7 days' if stats.weekly_accuracy is not none else 'No attempts this week' }}</span></article>
 </section>
 
 <section class="panel calendar-panel">
   <div class="section-heading compact"><h2>Practice calendar</h2><span class="muted">Your recent rhythm</span></div>
   <div class="calendar-placeholder" aria-label="Practice calendar with no practice recorded yet">
-    {% for square in range(28) %}<span class="calendar-square"></span>{% endfor %}
+    {% for offset in range(27, -1, -1) %}
+      {% set day = (today - timedelta(days=offset)).isoformat() if today is defined else '' %}
+      <span class="calendar-square {{ 'practiced' if day in practice_day_strings else '' }}" title="{{ day }}"></span>
+    {% endfor %}
   </div>
   <p class="muted">Complete a quiz and your practice days will appear here.</p>
 </section>

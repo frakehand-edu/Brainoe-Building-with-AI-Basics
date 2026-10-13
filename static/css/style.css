@@ -52,6 +52,13 @@ h2 { letter-spacing: -.035em; }
 .calendar-panel { margin-top: 2rem; }
 .calendar-placeholder { display: grid; gap: .45rem; grid-template-columns: repeat(14, 1fr); margin: 1.5rem 0 1rem; max-width: 34rem; }
 .calendar-square { aspect-ratio: 1; background: var(--surface-strong); border-radius: .2rem; }
+.calendar-square.practiced { background: var(--success); }
+.history-list, .review-list { display: grid; gap: .8rem; }
+.history-item { align-items: center; display: grid; gap: 1rem; grid-template-columns: 1fr auto auto auto; }
+.history-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.history-date, .history-percentage { color: var(--muted); }
+.review-correct { color: var(--success); font-size: .8rem; font-weight: 750; text-transform: uppercase; }
+.review-incorrect { color: var(--error); font-size: .8rem; font-weight: 750; text-transform: uppercase; }
 .empty-state { margin-top: 2rem; padding: 4rem 2rem; text-align: center; }
 .empty-icon { align-items: center; background: rgba(183, 162, 255, .15); border-radius: 50%; color: var(--accent-bright); display: flex; font-size: 1.5rem; height: 3.5rem; justify-content: center; margin: 0 auto 1.2rem; width: 3.5rem; }
 .question-list { display: grid; gap: 1rem; }

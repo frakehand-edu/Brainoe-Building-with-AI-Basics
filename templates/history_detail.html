@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Quiz Review · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="section-heading">
+  <div><p class="eyebrow">Past quiz review</p><h1>{{ attempt.correct_count }}/{{ attempt.question_count }}</h1><p class="lede">{{ attempt.percentage|round|int }}% correct · {{ attempt.completed_at|replace('T', ' ') }}</p></div>
+  <a class="button button-secondary" href="{{ url_for('history') }}">Back to History</a>
+</div>
+<section class="review-list">
+  {% for item in review %}
+    <article class="question-card">
+      <div class="question-card-heading"><span class="question-number">Q{{ item.question_order }}</span><span class="{{ 'review-correct' if item.is_correct else 'review-incorrect' }}">{{ 'Correct' if item.is_correct else 'Needs review' }}</span></div>
+      <h2>{{ item.question_text }}</h2>
+      <p class="muted">Your answer: <strong>{{ item.selected_choice|upper }}</strong> · Correct answer: <strong>{{ item.correct_choice|upper }}</strong></p>
+      <p class="muted">{{ item.explanation }}</p>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

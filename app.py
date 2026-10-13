@@ -1,6 +1,7 @@
 import json
 import random
 import tempfile
+from datetime import date, timedelta
 from pathlib import Path
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
@@ -12,9 +13,12 @@ from db.queries import (
     add_questions,
     delete_question,
     get_attempt,
+    get_attempt_review,
+    get_attempts,
     get_question_count,
     get_questions,
     get_questions_by_ids,
+    get_progress_stats,
     save_attempt,
 )
 from services.pdf_extractor import extract_pdf_text
@@ -34,7 +38,17 @@ def create_app() -> Flask:
 
     @app.get("/")
     def overview():
-        return render_template("overview.html", question_count=get_question_count())
+        return render_template(
+            "overview.html",
+            question_count=get_question_count(),
+            stats=get_progress_stats(),
+            today=date.today(),
+            timedelta=timedelta,
+            practice_day_strings={
+                practiced_day.isoformat()
+                for practiced_day in get_progress_stats()["practice_days"]
+            },
+        )
 
     @app.get("/quiz")
     def quiz_me():
@@ -244,7 +258,19 @@ def create_app() -> Flask:
 
     @app.get("/history")
     def history():
-        return render_template("history.html")
+        return render_template("history.html", attempts=get_attempts())
+
+    @app.get("/history/<int:attempt_id>")
+    def history_detail(attempt_id: int):
+        attempt = get_attempt(attempt_id)
+        if not attempt:
+            flash("That quiz history entry was not found.", "error")
+            return redirect(url_for("history"))
+        return render_template(
+            "history_detail.html",
+            attempt=attempt,
+            review=get_attempt_review(attempt_id),
+        )
 
     return app
 

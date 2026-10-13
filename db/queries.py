@@ -147,3 +147,71 @@ def get_attempt(attempt_id: int) -> dict | None:
         "SELECT * FROM quiz_attempts WHERE id = ?", (attempt_id,)
     ).fetchone()
     return dict(row) if row else None
+
+
+def get_attempts() -> list[dict]:
+    rows = get_db().execute(
+        "SELECT * FROM quiz_attempts ORDER BY completed_at DESC, id DESC"
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_attempt_review(attempt_id: int) -> list[dict]:
+    rows = get_db().execute(
+        """
+        SELECT aq.question_order, aq.selected_choice, aq.is_correct,
+               q.question_text, q.choice_a, q.choice_b, q.choice_c, q.choice_d,
+               q.correct_choice, q.explanation
+        FROM attempt_questions AS aq
+        JOIN questions AS q ON q.id = aq.question_id
+        WHERE aq.attempt_id = ?
+        ORDER BY aq.question_order
+        """,
+        (attempt_id,),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_progress_stats() -> dict:
+    attempts = get_attempts()
+    if not attempts:
+        return {
+            "streak": 0,
+            "daily_accuracy": None,
+            "weekly_accuracy": None,
+            "practice_days": set(),
+        }
+
+    today = datetime.now().date()
+    practice_days = {
+        datetime.fromisoformat(attempt["completed_at"]).date()
+        for attempt in attempts
+    }
+    streak = 0
+    cursor = today
+    while cursor in practice_days:
+        streak += 1
+        cursor = cursor.fromordinal(cursor.toordinal() - 1)
+
+    daily_attempts = [
+        attempt
+        for attempt in attempts
+        if datetime.fromisoformat(attempt["completed_at"]).date() == today
+    ]
+    weekly_attempts = [
+        attempt
+        for attempt in attempts
+        if (today - datetime.fromisoformat(attempt["completed_at"]).date()).days < 7
+    ]
+
+    def accuracy(items: list[dict]) -> float | None:
+        total = sum(item["question_count"] for item in items)
+        correct = sum(item["correct_count"] for item in items)
+        return round(correct / total * 100) if total else None
+
+    return {
+        "streak": streak,
+        "daily_accuracy": accuracy(daily_attempts),
+        "weekly_accuracy": accuracy(weekly_attempts),
+        "practice_days": practice_days,
+    }

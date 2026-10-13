@@ -123,6 +123,32 @@ Explanation: The third answer is correct.
             next_response = self.client.post("/quiz/next", follow_redirects=True)
         self.assertIn(b"5/5", next_response.data)
 
+    def test_completed_quiz_appears_in_history_and_overview(self):
+        for number in range(5):
+            self.client.post(
+                "/question-bank/manual",
+                data={
+                    "question_text": f"History question {number}",
+                    "choice_a": "First",
+                    "choice_b": "Second",
+                    "choice_c": "Third",
+                    "choice_d": "Fourth",
+                    "correct_choice": "a",
+                    "explanation": "First is correct.",
+                },
+            )
+        self.client.post("/quiz/setup", data={"question_count": "5"})
+        for _ in range(5):
+            self.client.post("/quiz/question", data={"selected_choice": "a"})
+            response = self.client.post("/quiz/next", follow_redirects=True)
+        self.assertIn(b"5/5", response.data)
+        history = self.client.get("/history")
+        self.assertIn(b"5/5", history.data)
+        detail = self.client.get("/history/1")
+        self.assertIn(b"History question", detail.data)
+        overview = self.client.get("/")
+        self.assertIn(b"100%", overview.data)
+
     def test_delete_question_requires_post_and_removes_question(self):
         self.client.post(
             "/question-bank/manual",
