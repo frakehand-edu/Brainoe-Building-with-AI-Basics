@@ -11,6 +11,7 @@ class AppSmokeTests(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         app = create_app()
+        self.app = app
         app.config.update(
             TESTING=True,
             DATABASE=Path(self.temp_dir.name) / "test.sqlite3",
@@ -21,6 +22,10 @@ class AppSmokeTests(unittest.TestCase):
         self.client = app.test_client()
 
     def tearDown(self):
+        from db.connection import close_db
+
+        with self.app.app_context():
+            close_db()
         self.temp_dir.cleanup()
 
     def test_main_pages_load(self):
@@ -117,6 +122,39 @@ Explanation: The third answer is correct.
             self.assertIn(b"The correct answer is", feedback.data)
             next_response = self.client.post("/quiz/next", follow_redirects=True)
         self.assertIn(b"5/5", next_response.data)
+
+    def test_delete_question_requires_post_and_removes_question(self):
+        self.client.post(
+            "/question-bank/manual",
+            data={
+                "question_text": "Delete me",
+                "choice_a": "First",
+                "choice_b": "Second",
+                "choice_c": "Third",
+                "choice_d": "Fourth",
+                "correct_choice": "a",
+                "explanation": "First is correct.",
+            },
+        )
+        question_bank = self.client.get("/question-bank")
+        self.assertIn(b"Delete me", question_bank.data)
+        database_path = Path(self.temp_dir.name) / "test.sqlite3"
+        import sqlite3
+
+        connection = sqlite3.connect(database_path)
+        try:
+            question_id = connection.execute(
+                "SELECT id FROM questions WHERE question_text = ?", ("Delete me",)
+            ).fetchone()[0]
+        finally:
+            connection.close()
+        response = self.client.post(
+            f"/question-bank/{question_id}/delete",
+            follow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(b"Delete me", response.data)
+        self.assertIn(b"Question deleted", response.data)
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Upload a sample PDF, inspect the extracted preview, cancel once to confirm the bank is unchanged, then upload it again and report whether the extracted content matches the source.
   Commit: `Add PDF extraction preview`
 
-- [ ] **3. You can confirm questions and run a complete quiz**
+- [x] **3. You can confirm questions and run a complete quiz**
   Becomes usable: Confirmed questions become available to Quiz me; the learner can choose 5, 10, or 15 when enough questions exist, answer each question, see feedback and explanation, and reach a score.
   Why now: Connects the imported kernel to the core active-learning loop and creates the first compelling demo journey.
   PRD ref: `prd.md > The Core Journey` (steps 3-8), `prd.md > Features and Behavior > Starting and completing a quiz`
@@ -50,13 +50,13 @@ Build mode: learn
   Commit: `Persist quiz history and progress`
 
 - [ ] **5. You can safely manage the question bank**
-  Becomes usable: The learner can clear the question bank only after an explicit confirmation and can recover from failed imports through manual entry.
+  Becomes usable: The learner can delete an individual question or clear the question bank only after explicit confirmation and can recover from failed imports through manual entry.
   Why now: Completes the important safety and recovery states without adding deferred features such as AI, OCR, filters, or accounts.
   PRD ref: `prd.md > Features and Behavior > Clearing the question bank`, `prd.md > States and Boundaries`
   Spec ref: `spec.md > Components > Manual entry and recovery UI`, `spec.md > Important Failure Modes`
-  Build: Add the red delete/grey cancel confirmation, clear-data behavior, no-usable-question recovery guidance, and final visual polish for the demo path.
-  Verify (mechanical): Test cancel and confirm branches independently, confirm clearing removes questions but preserves the app, and confirm an unusable upload shows recovery actions without saving partial data.
-  Learner check: Trigger Clear Database and cancel, trigger it again and confirm, then try an unusable file and use manual entry to restore one usable question.
+  Build: Add per-question delete confirmation, the red delete/grey cancel confirmation for clearing the whole bank, clear-data behavior, no-usable-question recovery guidance, and final visual polish for the demo path.
+  Verify (mechanical): Test individual-delete cancel/confirm branches and whole-bank cancel/confirm branches independently, confirm clearing removes questions but preserves the app, and confirm an unusable upload shows recovery actions without saving partial data.
+  Learner check: Delete one question and cancel once before confirming, then trigger Clear Database and cancel, trigger it again and confirm, then try an unusable file and use manual entry to restore one usable question.
   Commit: `Add question bank safety and recovery`
 
 ## Hands-on Checkpoints
@@ -85,3 +85,4 @@ Activity mode:
 - Slice 1 feedback changed the Overview **Quiz me** route to explain when fewer than five questions exist and added an interim setup page for the already-populated case; the full quiz setup remains in Slice 3 as planned. Visual feedback also added active navigation pills, a brain mark, stronger calendar spacing, and cream text on the Overview card.
 - Follow-up visual feedback enlarged and integrated the Overview card copy so it follows the card's angled presentation instead of looking like detached labels.
 - Slice 3 feedback keeps imported questions in insertion order, uses an error-colored cancellation notice, and adjusts quiz question/choice typography for readability.
+- Added individual question deletion after learner feedback that imported questions could not be removed; this is included in Slice 5 with explicit confirmation to protect against accidental loss.

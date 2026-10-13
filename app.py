@@ -10,6 +10,7 @@ from db.connection import close_db, init_db
 from db.queries import (
     add_question,
     add_questions,
+    delete_question,
     get_attempt,
     get_question_count,
     get_questions,
@@ -147,6 +148,14 @@ def create_app() -> Flask:
             questions=get_questions(),
             question_count=get_question_count(),
         )
+
+    @app.post("/question-bank/<int:question_id>/delete")
+    def delete_question_route(question_id: int):
+        if delete_question(question_id):
+            flash("Question deleted from your question bank.", "success")
+        else:
+            flash("That question was not found.", "error")
+        return redirect(url_for("question_bank"))
 
     @app.post("/question-bank/import")
     def import_questions():

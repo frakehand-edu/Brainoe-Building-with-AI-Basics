@@ -49,6 +49,13 @@ def get_question_count() -> int:
     return int(row["count"])
 
 
+def delete_question(question_id: int) -> bool:
+    database = get_db()
+    cursor = database.execute("DELETE FROM questions WHERE id = ?", (question_id,))
+    database.commit()
+    return cursor.rowcount == 1
+
+
 def add_questions(questions: list[dict], source_name: str) -> int:
     database = get_db()
     database.executemany(

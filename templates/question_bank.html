@@ -26,7 +26,15 @@
   <section class="question-list">
     {% for question in questions %}
       <article class="question-card">
-        <div class="question-card-heading"><span class="question-number">Q{{ loop.index }}</span><span class="tag">Manual</span></div>
+        <div class="question-card-heading">
+          <span class="question-number">Q{{ loop.index }}</span>
+          <div class="question-card-actions">
+            <span class="tag">{{ question.source_name }}</span>
+            <form method="post" action="{{ url_for('delete_question_route', question_id=question.id) }}" onsubmit="return confirm('Delete this question from your question bank?');">
+              <button class="delete-button" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
         <h2>{{ question.question_text }}</h2>
         <ol class="choice-list">
           <li>{{ question.choice_a }}</li><li>{{ question.choice_b }}</li>

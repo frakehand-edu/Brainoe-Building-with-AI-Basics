@@ -64,6 +64,9 @@ h2 { letter-spacing: -.035em; }
 .preview-confirm { display: flex; justify-content: end; margin-top: 1.5rem; }
 .question-card h2 { font-size: 1.2rem; line-height: 1.45; }
 .question-card-heading { display: flex; justify-content: space-between; margin-bottom: 1.2rem; }
+.question-card-actions { align-items: center; display: flex; gap: .7rem; }
+.delete-button { background: transparent; border: 1px solid rgba(246, 154, 154, .4); border-radius: 99px; color: var(--error); cursor: pointer; font: inherit; font-size: .78rem; padding: .35rem .65rem; }
+.delete-button:hover { background: rgba(246, 154, 154, .14); }
 .question-number, .tag { color: var(--accent-bright); font-size: .8rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
 .tag { background: rgba(183, 162, 255, .12); border-radius: 99px; padding: .35rem .6rem; }
 .choice-list { color: var(--muted); line-height: 1.8; padding-left: 1.3rem; }
