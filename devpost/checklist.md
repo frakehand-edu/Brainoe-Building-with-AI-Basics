@@ -39,7 +39,7 @@ Build mode: learn
   Learner check: Import or add enough questions, run a 5-question quiz, intentionally get one answer wrong, and confirm the feedback, final score, and Another quiz behavior.
   Commit: `Connect question bank to quiz flow`
 
-- [ ] **4. You can review saved history and progress after reopening**
+- [x] **4. You can review saved history and progress after reopening**
   Becomes usable: Completed quizzes persist across a restart, appear in History with date/time/result, open into a detailed review, and update Overview statistics and calendar.
   Why now: Adds the persistence value that makes repeated active practice useful beyond one session.
   PRD ref: `prd.md > Screens and Layout > Overview`, `prd.md > Screens and Layout > History and detailed review`, `prd.md > Features and Behavior > Progress, history, and persistence`
