@@ -61,12 +61,12 @@ Build mode: learn
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after Slice 1, review the app shell and manual-entry experience before parser and quiz work.
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Early usable behavior explored — after Slice 1, review the app shell and manual-entry experience before parser and quiz work.
+- [x] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 

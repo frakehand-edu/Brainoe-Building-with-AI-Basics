@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exam-to-Quiz App Map</title>
+  <style>
+    :root { color-scheme: dark; --bg: #171a23; --panel: #222633; --text: #f6f0df; --muted: #a9adba; --accent: #b7a2ff; --success: #86d5a6; }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, sans-serif; margin: 0; }
+    main { margin: 0 auto; max-width: 900px; padding: 48px 24px; }
+    h1, h2 { line-height: 1.1; }
+    h1 { font-size: clamp(2.4rem, 7vw, 5rem); letter-spacing: -.06em; max-width: 10ch; }
+    h2 { margin-top: 48px; }
+    .muted { color: var(--muted); }
+    .diagram { background: var(--panel); border: 1px solid #ffffff1f; border-radius: 20px; margin: 24px 0; padding: 24px; }
+    svg { display: block; height: auto; max-width: 100%; }
+    code { background: #0f1118; border-radius: 5px; padding: 2px 5px; }
+    li { margin: 10px 0; }
+    details { background: var(--panel); border: 1px solid #ffffff1f; border-radius: 12px; margin: 12px 0; padding: 14px 18px; }
+    summary { color: var(--accent); cursor: pointer; font-weight: 700; }
+    .practice { border-left: 4px solid var(--success); padding-left: 16px; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="muted">Offline reference · snapshot from commit <code>b5aeeed</code></p>
+  <h1>Exam-to-Quiz app map</h1>
+  <p class="muted">A local Flask study app that turns supported text-based exam PDFs into an editable question bank, runs randomized MCQ quizzes, and saves progress in SQLite.</p>
+
+  <h2>One real action through the app</h2>
+  <div class="diagram">
+    <svg viewBox="0 0 820 180" role="img" aria-labelledby="diagram-title diagram-desc">
+      <title id="diagram-title">PDF import flow</title>
+      <desc id="diagram-desc">A PDF moves through the Flask route, local text extraction and parser, preview editing, SQLite storage, and the visible question bank.</desc>
+      <g fill="#b7a2ff" font-family="system-ui" font-size="16" text-anchor="middle">
+        <rect x="10" y="55" width="130" height="70" rx="14"/><text x="75" y="86" fill="#171a23">PDF upload</text><text x="75" y="108" fill="#171a23">browser</text>
+        <rect x="170" y="55" width="130" height="70" rx="14"/><text x="235" y="86" fill="#171a23">import_questions</text><text x="235" y="108" fill="#171a23">app.py</text>
+        <rect x="330" y="55" width="130" height="70" rx="14"/><text x="395" y="86" fill="#171a23">extract + parse</text><text x="395" y="108" fill="#171a23">services/</text>
+        <rect x="490" y="55" width="130" height="70" rx="14"/><text x="555" y="86" fill="#171a23">editable preview</text><text x="555" y="108" fill="#171a23">template</text>
+        <rect x="650" y="55" width="150" height="70" rx="14"/><text x="725" y="86" fill="#171a23">question bank</text><text x="725" y="108" fill="#171a23">SQLite</text>
+      </g>
+      <g fill="none" stroke="#f6f0df" stroke-width="2" marker-end="url(#arrow)">
+        <path d="M140 90h30M300 90h30M460 90h30M620 90h30"/>
+      </g>
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0l8 4-8 4z" fill="#f6f0df"/></marker></defs>
+    </svg>
+  </div>
+
+  <h2>Reference route</h2>
+  <p class="muted">Use this route when changing the import-to-quiz behavior. It was exercised during the build; the file locations are a guide, not a requirement to memorize.</p>
+  <ol>
+    <li><code>app.py</code> → <code>import_questions</code> receives the upload and stores the temporary preview in the Flask session.</li>
+    <li><code>services/pdf_extractor.py</code> → <code>extract_pdf_text</code>, then <code>services/question_parser.py</code> → <code>parse_questions</code> turn supported PDF text into validated records.</li>
+    <li><code>templates/import_preview.html</code> → <code>edit_import_preview</code> validates corrections; <code>db/queries.py</code> → <code>add_questions</code> saves confirmed records to SQLite.</li>
+  </ol>
+
+  <h2>To change this, start here</h2>
+  <details><summary>Change supported PDF formats</summary><p>Start in <code>services/question_parser.py</code> and add a focused parser test in <code>tests/test_app.py</code> before changing the route.</p></details>
+  <details><summary>Change quiz behavior</summary><p>Start at <code>app.py</code> symbols <code>start_quiz</code>, <code>quiz_question</code>, and <code>next_question</code>; use the quiz flow tests as the safety net.</p></details>
+  <details><summary>Change saved data or progress</summary><p>Start in <code>db/connection.py</code> for tables and <code>db/queries.py</code> for reads/writes, then update persistence tests.</p></details>
+  <details><summary>Change visual styling</summary><p>Start in <code>static/css/style.css</code> and the relevant template. Keep the dark background, cream text, and accessible contrast unless the product direction changes.</p></details>
+
+  <h2>A practice to reuse</h2>
+  <p class="practice">The PDF parser was treated as a risk early: a representative sample and tests established what “usable extraction” meant before the quiz depended on it. On another project, identify the uncertain input or external boundary early, write one observable test for it, and only then build the surrounding experience.</p>
+
+  <h2>Run it again</h2>
+  <pre><code>.\.venv\Scripts\Activate.ps1
+python app.py</code></pre>
+  <p>Open <code>http://127.0.0.1:5000</code>. This map is an offline snapshot and may drift as the app changes; refresh it after structural changes.</p>
+</main>
+</body>
+</html>
