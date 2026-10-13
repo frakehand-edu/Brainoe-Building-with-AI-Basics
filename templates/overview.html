@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Overview · Exam-to-Quiz{% endblock %}
+{% block content %}
+<section class="hero-grid">
+  <div>
+    <p class="eyebrow">Your active learning space</p>
+    <h1>Turn practice into progress.</h1>
+    <p class="lede">Build a question bank from your exam materials, then test what you really understand.</p>
+    <a class="button button-primary button-large" href="{{ url_for('quiz_me') }}">Quiz me <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="hero-orb" aria-hidden="true">
+    <span>Recall</span><span>Reflect</span><span>Repeat</span>
+  </div>
+</section>
+
+<section class="section-heading">
+  <div>
+    <p class="eyebrow">Overview</p>
+    <h2>Your practice at a glance</h2>
+  </div>
+  <p class="muted">{{ question_count }} question{{ '' if question_count == 1 else 's' }} in your bank</p>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card"><span class="stat-label">Day streak</span><strong>—</strong><span class="muted">Start your first quiz</span></article>
+  <article class="stat-card"><span class="stat-label">Daily accuracy</span><strong>—</strong><span class="muted">No attempts yet</span></article>
+  <article class="stat-card"><span class="stat-label">Weekly accuracy</span><strong>—</strong><span class="muted">No attempts yet</span></article>
+</section>
+
+<section class="panel calendar-panel">
+  <div class="section-heading compact"><h2>Practice calendar</h2><span class="muted">Your recent rhythm</span></div>
+  <div class="calendar-placeholder" aria-label="Practice calendar with no practice recorded yet">
+    {% for square in range(28) %}<span class="calendar-square"></span>{% endfor %}
+  </div>
+  <p class="muted">Complete a quiz and your practice days will appear here.</p>
+</section>
+{% endblock %}

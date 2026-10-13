@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Add Question · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="narrow-content">
+  <p class="eyebrow">Question Bank</p>
+  <h1>Add a question</h1>
+  <p class="lede">Create one four-choice question so you can start building your practice set.</p>
+  <form class="form-card panel" method="post">
+    <label for="question_text">Question</label>
+    <textarea id="question_text" name="question_text" rows="3" required>{{ request.form.get('question_text', '') }}</textarea>
+    <fieldset>
+      <legend>Answer choices</legend>
+      {% for letter in 'abcd' %}
+        <label for="choice_{{ letter }}">{{ letter|upper }})</label>
+        <input id="choice_{{ letter }}" name="choice_{{ letter }}" value="{{ request.form.get('choice_' ~ letter, '') }}" required>
+      {% endfor %}
+    </fieldset>
+    <label for="correct_choice">Correct answer</label>
+    <select id="correct_choice" name="correct_choice" required>
+      <option value="">Choose one</option>
+      {% for letter in 'abcd' %}<option value="{{ letter }}" {% if request.form.get('correct_choice') == letter %}selected{% endif %}>{{ letter|upper }}</option>{% endfor %}
+    </select>
+    <label for="explanation">Explanation</label>
+    <textarea id="explanation" name="explanation" rows="4" required>{{ request.form.get('explanation', '') }}</textarea>
+    <div class="form-actions">
+      <a class="button button-ghost" href="{{ url_for('question_bank') }}">Cancel</a>
+      <button class="button button-primary" type="submit">Save question</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

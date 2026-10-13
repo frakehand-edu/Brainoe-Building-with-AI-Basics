@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Quiz Setup · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="narrow-content">
+  <p class="eyebrow">Quiz me</p>
+  <h1>Choose your quiz length</h1>
+  <section class="panel empty-state">
+    <h2>Quiz setup is the next build slice</h2>
+    <p class="muted">You have {{ question_count }} questions ready. The 5, 10, and 15-question quiz controls will be connected next.</p>
+    <a class="button button-secondary" href="{{ url_for('question_bank') }}">Back to Question Bank</a>
+  </section>
+</div>
+{% endblock %}

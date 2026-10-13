@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Question Bank · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="section-heading">
+  <div>
+    <p class="eyebrow">Build your practice set</p>
+    <h1>Question Bank</h1>
+    <p class="lede">Add questions now, then use them to quiz yourself.</p>
+  </div>
+  <a class="button button-primary" href="{{ url_for('manual_question') }}">+ Add Questions</a>
+</div>
+
+{% if questions %}
+  <section class="question-list">
+    {% for question in questions %}
+      <article class="question-card">
+        <div class="question-card-heading"><span class="question-number">Q{{ loop.index }}</span><span class="tag">Manual</span></div>
+        <h2>{{ question.question_text }}</h2>
+        <ol class="choice-list">
+          <li>{{ question.choice_a }}</li><li>{{ question.choice_b }}</li>
+          <li>{{ question.choice_c }}</li><li>{{ question.choice_d }}</li>
+        </ol>
+      </article>
+    {% endfor %}
+  </section>
+{% else %}
+  <section class="empty-state panel">
+    <div class="empty-icon">?</div>
+    <h2>Your question bank is empty</h2>
+    <p class="muted">Add a question manually for now. PDF importing will be available in the next build slice.</p>
+    <a class="button button-secondary" href="{{ url_for('manual_question') }}">Add your first question</a>
+  </section>
+{% endif %}
+{% endblock %}

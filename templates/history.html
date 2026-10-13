@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}History · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="section-heading"><div><p class="eyebrow">Keep your momentum</p><h1>History</h1><p class="lede">Your completed quizzes will appear here.</p></div></div>
+<section class="empty-state panel">
+  <div class="empty-icon">↗</div>
+  <h2>No quizzes yet</h2>
+  <p class="muted">Complete your first quiz and your score, date, and detailed review will be saved here.</p>
+  <a class="button button-secondary" href="{{ url_for('overview') }}">Back to Overview</a>
+</section>
+{% endblock %}
