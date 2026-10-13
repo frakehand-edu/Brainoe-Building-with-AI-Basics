@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Open the local app, visit all three navigation tabs, add a manual four-choice question, and say whether the visual direction and page structure feel like the product you pictured.
   Commit: `Build app shell and manual question entry`
 
-- [ ] **2. You can upload a PDF and preview extracted questions**
+- [x] **2. You can upload a PDF and preview extracted questions**
   Becomes usable: A supported text-based exam PDF is uploaded and produces a preview showing question text, four choices, correct answer, and explanation without changing the saved bank until confirmation.
   Why now: Proves the unique PDF-to-question-bank kernel early and exposes real PDF-format risks before quiz work depends on it.
   PRD ref: `prd.md > Screens and Layout > Import preview`, `prd.md > Features and Behavior > Adding and reviewing questions`
