@@ -94,7 +94,7 @@ PRD ref: `prd.md > Screens and Layout > Overview`, `prd.md > Features and Behavi
 
 ### Question Bank management
 
-Lists saved questions, accepts PDF uploads, launches manual entry, previews extracted questions, confirms or cancels imports, deletes individual questions after confirmation, and starts the clear-database confirmation flow.
+Lists saved questions, accepts PDF uploads, launches manual entry, previews and edits extracted questions, confirms or cancels imports, deletes individual questions after confirmation, and starts the clear-database confirmation flow.
 
 PRD ref: `prd.md > Screens and Layout > Question Bank`, `prd.md > Screens and Layout > Import preview`, `prd.md > Screens and Layout > Manual question entry`, `prd.md > Features and Behavior > Adding and reviewing questions`.
 
@@ -220,6 +220,7 @@ Possible later AI/OCR service:
 ## Important Failure Modes
 
 - **PDF has no extractable text or unsupported formatting** → show an explicit import error, explain that the file could not produce usable questions, and offer another file or manual entry.
+- **Extracted question needs correction** → allow edits to question text, choices, correct answer, and explanation before confirmation; reject incomplete edits visibly.
 - **Question bank has fewer questions than requested** → show the available/required counts and direct the learner to Question Bank instead of starting a partial quiz.
 - **Database cannot be opened or saved** → show a clear error and do not claim the import or result was saved.
 - **Learner cancels an import or database clear** → leave existing saved data unchanged.

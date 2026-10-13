@@ -72,6 +72,10 @@ h2 { letter-spacing: -.035em; }
 .upload-form input[type="file"] { max-width: 14rem; padding: .55rem; }
 .file-picker { color: var(--accent-bright); cursor: pointer; }
 .answer-preview { border-top: 1px solid var(--border); margin: 1rem 0 0; padding-top: 1rem; }
+.preview-choices { border: 0; display: grid; gap: .55rem; grid-template-columns: auto 1fr; margin: 1rem 0; padding: 0; }
+.preview-choices legend { grid-column: 1 / -1; }
+.preview-choices input { margin-bottom: .2rem; }
+.preview-edit-actions { display: flex; justify-content: end; margin-top: 1rem; }
 .preview-confirm { display: flex; justify-content: end; margin-top: 1.5rem; }
 .question-card h2 { font-size: 1.2rem; line-height: 1.45; }
 .question-card-heading { display: flex; justify-content: space-between; margin-bottom: 1.2rem; }

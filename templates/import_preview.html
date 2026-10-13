@@ -10,20 +10,35 @@
   <form method="post" action="{{ url_for('cancel_import') }}"><button class="button button-ghost" type="submit">Cancel X</button></form>
 </div>
 
+<form method="post" action="{{ url_for('edit_import_preview') }}">
 <section class="question-list">
   {% for question in questions %}
+    {% set question_index = loop.index0 %}
     <article class="question-card">
       <div class="question-card-heading"><span class="question-number">Q{{ loop.index }}</span><span class="tag">Preview</span></div>
-      <h2>{{ question.question_text }}</h2>
-      <ol class="choice-list">
-        {% for choice in question.choices %}<li>{{ choice }}</li>{% endfor %}
-      </ol>
-      <p class="answer-preview"><strong>Correct answer:</strong> {{ question.correct_choice|upper }}</p>
-      <p class="muted"><strong>Explanation:</strong> {{ question.explanation }}</p>
+      <label for="question_{{ question_index }}_text">Question</label>
+      <textarea id="question_{{ question_index }}_text" name="question_{{ question_index }}_text" rows="2" required>{{ question.question_text }}</textarea>
+      <fieldset class="preview-choices">
+        <legend>Answer choices</legend>
+        {% for letter in 'abcd' %}
+          {% set choice_index = loop.index0 %}
+          <label for="question_{{ question_index }}_choice_{{ letter }}">{{ letter|upper }})</label>
+          <input id="question_{{ question_index }}_choice_{{ letter }}" name="question_{{ question_index }}_choice_{{ letter }}" value="{{ question.choices[choice_index] }}" required>
+        {% endfor %}
+      </fieldset>
+      <label for="question_{{ question_index }}_correct">Correct answer</label>
+      <select id="question_{{ question_index }}_correct" name="question_{{ question_index }}_correct" required>
+        {% for letter in 'abcd' %}<option value="{{ letter }}" {% if question.correct_choice == letter %}selected{% endif %}>{{ letter|upper }}</option>{% endfor %}
+      </select>
+      <label for="question_{{ question_index }}_explanation">Explanation</label>
+      <textarea id="question_{{ question_index }}_explanation" name="question_{{ question_index }}_explanation" rows="3" required>{{ question.explanation }}</textarea>
     </article>
   {% endfor %}
 </section>
-
+<div class="preview-edit-actions">
+  <button class="button button-secondary" type="submit">Save preview edits</button>
+</div>
+</form>
 <form class="preview-confirm" method="post" action="{{ url_for('confirm_import') }}">
   <button class="button button-primary button-large" type="submit">Add Questions to Database</button>
 </form>

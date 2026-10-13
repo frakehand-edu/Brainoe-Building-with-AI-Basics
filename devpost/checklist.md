@@ -49,7 +49,7 @@ Build mode: learn
   Learner check: Close and reopen the app, open History and a completed attempt, then inspect Overview and tell me what feels clear or confusing.
   Commit: `Persist quiz history and progress`
 
-- [ ] **5. You can safely manage the question bank**
+- [x] **5. You can safely manage the question bank**
   Becomes usable: The learner can delete an individual question or clear the question bank only after explicit confirmation and can recover from failed imports through manual entry.
   Why now: Completes the important safety and recovery states without adding deferred features such as AI, OCR, filters, or accounts.
   PRD ref: `prd.md > Features and Behavior > Clearing the question bank`, `prd.md > States and Boundaries`
@@ -86,3 +86,4 @@ Activity mode:
 - Follow-up visual feedback enlarged and integrated the Overview card copy so it follows the card's angled presentation instead of looking like detached labels.
 - Slice 3 feedback keeps imported questions in insertion order, uses an error-colored cancellation notice, and adjusts quiz question/choice typography for readability.
 - Added individual question deletion after learner feedback that imported questions could not be removed; this is included in Slice 5 with explicit confirmation to protect against accidental loss.
+- Added editable fields to the import preview after learner chose this as the first post-POC enhancement; this preserves the PDF-to-question-bank kernel while making parser corrections possible before saving.

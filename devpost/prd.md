@@ -91,6 +91,7 @@ The visual direction should support focused active learning rather than feel lik
 - The learner can choose a file from the Question Bank page.
 - The app attempts to extract MCQ questions, four choices, correct answers, and explanations.
 - Extracted content appears in a reviewable preview before changing the question bank.
+- Each extracted question can be corrected in the preview before confirmation.
 - **Cancel X** discards the preview without changing the question bank.
 - **Add Questions to Database** appends the previewed questions to the existing question bank.
 - If no usable questions are extracted, the app shows an understandable error and recovery guidance, including trying another file or using manual entry.
@@ -100,6 +101,7 @@ The visual direction should support focused active learning rather than feel lik
 Acceptance criteria:
 
 - A successful import visibly shows extracted questions before they are added.
+- Editing a question in the preview changes the version that is added after confirmation.
 - Cancelling leaves the existing question bank unchanged.
 - Confirming an import makes the questions available to **Quiz me**.
 - An unusable file produces an error state rather than a misleading empty success state.

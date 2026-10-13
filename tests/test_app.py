@@ -92,6 +92,43 @@ Explanation: The third answer is correct.
         self.assertIn(b"Which answer is correct?", response.data)
         self.assertNotIn(b"Which answer is correct?", self.client.get("/question-bank").data)
 
+    def test_preview_edits_are_saved_before_confirmation(self):
+        import fitz
+
+        document = fitz.open()
+        page = document.new_page()
+        page.insert_text(
+            (72, 72),
+            "Question 1. Which answer is correct?\nA) First\nB) Second\nC) Third\nD) Fourth\nAnswer: C\nExplanation: The third answer is correct.",
+        )
+        pdf_bytes = document.tobytes()
+        document.close()
+        self.client.post(
+            "/question-bank/import",
+            data={"question_file": (BytesIO(pdf_bytes), "sample.pdf")},
+            content_type="multipart/form-data",
+        )
+        response = self.client.post(
+            "/question-bank/import/edit",
+            data={
+                "question_0_text": "Edited question",
+                "question_0_choice_a": "Edited first",
+                "question_0_choice_b": "Edited second",
+                "question_0_choice_c": "Edited third",
+                "question_0_choice_d": "Edited fourth",
+                "question_0_correct": "b",
+                "question_0_explanation": "The edited second answer is correct.",
+            },
+            follow_redirects=True,
+        )
+        self.assertIn(b"Edited question", response.data)
+        confirmed = self.client.post(
+            "/question-bank/import/confirm",
+            follow_redirects=True,
+        )
+        self.assertIn(b"Edited question", confirmed.data)
+        self.assertIn(b"Edited second", confirmed.data)
+
     def test_confirmed_questions_can_complete_a_quiz(self):
         for number in range(5):
             self.client.post(

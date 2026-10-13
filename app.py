@@ -221,6 +221,61 @@ def create_app() -> Flask:
             source_name=session.get("import_source", "uploaded PDF"),
         )
 
+    @app.post("/question-bank/import/edit")
+    def edit_import_preview():
+        preview_data = session.get("import_preview")
+        if not preview_data:
+            flash("There is no import preview to edit.", "error")
+            return redirect(url_for("question_bank"))
+
+        original_questions = json.loads(preview_data)
+        edited_questions = []
+        for index, original in enumerate(original_questions):
+            choices = [
+                request.form.get(f"question_{index}_choice_{letter}", "").strip()
+                for letter in "abcd"
+            ]
+            edited_questions.append(
+                {
+                    "question_text": request.form.get(
+                        f"question_{index}_text", ""
+                    ).strip(),
+                    "choices": choices,
+                    "correct_choice": request.form.get(
+                        f"question_{index}_correct", ""
+                    ).strip().lower(),
+                    "explanation": request.form.get(
+                        f"question_{index}_explanation", ""
+                    ).strip(),
+                }
+            )
+
+        invalid_question = next(
+            (
+                question
+                for question in edited_questions
+                if not question["question_text"]
+                or any(not choice for choice in question["choices"])
+                or question["correct_choice"] not in "abcd"
+                or not question["explanation"]
+            ),
+            None,
+        )
+        if invalid_question is not None:
+            flash(
+                "Each question needs text, four choices, a correct answer, and an explanation.",
+                "error",
+            )
+            return render_template(
+                "import_preview.html",
+                questions=edited_questions,
+                source_name=session.get("import_source", "uploaded PDF"),
+            )
+
+        session["import_preview"] = json.dumps(edited_questions)
+        flash("Preview edits saved. Review the updated questions before adding them.", "success")
+        return redirect(url_for("import_preview"))
+
     @app.post("/question-bank/import/cancel")
     def cancel_import():
         session.pop("import_preview", None)
