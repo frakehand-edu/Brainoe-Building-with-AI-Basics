@@ -64,6 +64,10 @@ h2 { letter-spacing: -.035em; }
 .question-list { display: grid; gap: 1rem; }
 .question-card { padding: 1.5rem; }
 .upload-card { align-items: end; display: flex; gap: 2rem; justify-content: space-between; margin: 2rem 0; }
+.database-actions { align-items: center; display: flex; justify-content: space-between; margin: 1rem 0 2rem; }
+.button-danger-outline { border: 1px solid rgba(246, 154, 154, .45); color: var(--error); }
+.button-danger { background: var(--error); color: #35191d; }
+.confirmation-card { margin-top: 2rem; }
 .upload-form { align-items: center; display: flex; flex-wrap: wrap; gap: .8rem; justify-content: end; }
 .upload-form input[type="file"] { max-width: 14rem; padding: .55rem; }
 .file-picker { color: var(--accent-bright); cursor: pointer; }

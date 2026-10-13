@@ -182,6 +182,39 @@ Explanation: The third answer is correct.
         self.assertNotIn(b"Delete me", response.data)
         self.assertIn(b"Question deleted", response.data)
 
+    def test_clear_database_requires_post_and_removes_questions(self):
+        self.client.post(
+            "/question-bank/manual",
+            data={
+                "question_text": "Clear me",
+                "choice_a": "First",
+                "choice_b": "Second",
+                "choice_c": "Third",
+                "choice_d": "Fourth",
+                "correct_choice": "a",
+                "explanation": "First is correct.",
+            },
+        )
+        confirmation = self.client.get("/question-bank/clear")
+        self.assertEqual(confirmation.status_code, 200)
+        self.assertIn(b"This action cannot be undone", confirmation.data)
+        self.assertIn(b"Clear me", self.client.get("/question-bank").data)
+        response = self.client.post("/question-bank/clear", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(b"Clear me", response.data)
+        self.assertIn(b"Deleted 1 question", response.data)
+
+    def test_unusable_pdf_shows_recovery_message(self):
+        response = self.client.post(
+            "/question-bank/import",
+            data={"question_file": (BytesIO(b"not a pdf"), "broken.pdf")},
+            content_type="multipart/form-data",
+            follow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"could not", response.data.lower())
+        self.assertIn(b"manual", response.data.lower())
+
 
 if __name__ == "__main__":
     unittest.main()

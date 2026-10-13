@@ -21,6 +21,10 @@
     <button class="button button-primary" type="submit">Preview extracted questions <span aria-hidden="true">→</span></button>
   </form>
 </section>
+<div class="database-actions">
+  <span class="muted">{{ question_count }} saved question{{ '' if question_count == 1 else 's' }}</span>
+  <a class="button button-danger-outline" href="{{ url_for('clear_database_confirmation') }}">Clear Database</a>
+</div>
 
 {% if questions %}
   <section class="question-list">

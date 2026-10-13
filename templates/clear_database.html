@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Clear Database · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="narrow-content">
+  <p class="eyebrow">Question Bank</p>
+  <h1>Clear the question bank?</h1>
+  <section class="panel confirmation-card">
+    <p>This will permanently remove all {{ question_count }} saved question{{ '' if question_count == 1 else 's' }}. Your quiz history will remain available.</p>
+    <p class="muted">This action cannot be undone.</p>
+    <div class="form-actions">
+      <a class="button button-secondary" href="{{ url_for('question_bank') }}">Cancel</a>
+      <form method="post"><button class="button button-danger" type="submit">Delete all questions</button></form>
+    </div>
+  </section>
+</div>
+{% endblock %}

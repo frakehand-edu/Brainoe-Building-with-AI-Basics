@@ -5,7 +5,12 @@ import fitz
 
 def extract_pdf_text(file_path: str | Path) -> str:
     """Extract selectable text from every page of a PDF."""
-    document = fitz.open(file_path)
+    try:
+        document = fitz.open(file_path)
+    except fitz.FileDataError as error:
+        raise ValueError(
+            "This file could not be read as a PDF. Try another file or use manual entry."
+        ) from error
     try:
         text = "\n".join(page.get_text() for page in document).strip()
     finally:

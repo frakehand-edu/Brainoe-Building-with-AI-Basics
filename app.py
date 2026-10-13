@@ -11,6 +11,7 @@ from db.connection import close_db, init_db
 from db.queries import (
     add_question,
     add_questions,
+    clear_questions,
     delete_question,
     get_attempt,
     get_attempt_review,
@@ -169,6 +170,16 @@ def create_app() -> Flask:
             flash("Question deleted from your question bank.", "success")
         else:
             flash("That question was not found.", "error")
+        return redirect(url_for("question_bank"))
+
+    @app.get("/question-bank/clear")
+    def clear_database_confirmation():
+        return render_template("clear_database.html", question_count=get_question_count())
+
+    @app.post("/question-bank/clear")
+    def clear_database():
+        deleted_count = clear_questions()
+        flash(f"Deleted {deleted_count} question{'s' if deleted_count != 1 else ''} from your question bank.", "success")
         return redirect(url_for("question_bank"))
 
     @app.post("/question-bank/import")
