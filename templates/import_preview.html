@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Import Preview · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="section-heading">
+  <div>
+    <p class="eyebrow">Review before saving</p>
+    <h1>Import preview</h1>
+    <p class="lede">{{ questions|length }} question{{ '' if questions|length == 1 else 's' }} found in <strong>{{ source_name }}</strong>.</p>
+  </div>
+  <form method="post" action="{{ url_for('cancel_import') }}"><button class="button button-ghost" type="submit">Cancel X</button></form>
+</div>
+
+<section class="question-list">
+  {% for question in questions %}
+    <article class="question-card">
+      <div class="question-card-heading"><span class="question-number">Q{{ loop.index }}</span><span class="tag">Preview</span></div>
+      <h2>{{ question.question_text }}</h2>
+      <ol class="choice-list">
+        {% for choice in question.choices %}<li>{{ choice }}</li>{% endfor %}
+      </ol>
+      <p class="answer-preview"><strong>Correct answer:</strong> {{ question.correct_choice|upper }}</p>
+      <p class="muted"><strong>Explanation:</strong> {{ question.explanation }}</p>
+    </article>
+  {% endfor %}
+</section>
+
+<form class="preview-confirm" method="post" action="{{ url_for('confirm_import') }}">
+  <button class="button button-primary button-large" type="submit">Add Questions to Database</button>
+</form>
+{% endblock %}
