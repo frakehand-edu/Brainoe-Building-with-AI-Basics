@@ -18,7 +18,7 @@
   <form class="upload-form" method="post" action="{{ url_for('import_questions') }}" enctype="multipart/form-data">
     <label class="file-picker" for="question_file">Choose PDF</label>
     <input id="question_file" name="question_file" type="file" accept=".pdf,application/pdf" required>
-    <button class="button button-secondary" type="submit">Preview Questions</button>
+    <button class="button button-primary" type="submit">Preview extracted questions <span aria-hidden="true">→</span></button>
   </form>
 </section>
 

@@ -1,4 +1,5 @@
 import json
+import random
 import tempfile
 from pathlib import Path
 
@@ -6,7 +7,15 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from werkzeug.utils import secure_filename
 
 from db.connection import close_db, init_db
-from db.queries import add_question, get_question_count, get_questions
+from db.queries import (
+    add_question,
+    add_questions,
+    get_attempt,
+    get_question_count,
+    get_questions,
+    get_questions_by_ids,
+    save_attempt,
+)
 from services.pdf_extractor import extract_pdf_text
 from services.question_parser import parse_questions
 
@@ -39,6 +48,97 @@ def create_app() -> Flask:
     @app.get("/quiz/setup")
     def quiz_setup():
         return render_template("quiz_setup.html", question_count=get_question_count())
+
+    @app.post("/quiz/setup")
+    def start_quiz():
+        try:
+            question_count = int(request.form.get("question_count", "0"))
+        except ValueError:
+            question_count = 0
+        available_count = get_question_count()
+        if question_count not in (5, 10, 15):
+            flash("Choose a quiz length of 5, 10, or 15 questions.", "error")
+            return redirect(url_for("quiz_setup"))
+        if available_count < question_count:
+            flash(
+                f"You selected {question_count} questions, but your bank has only {available_count}. Add more questions first.",
+                "error",
+            )
+            return redirect(url_for("question_bank"))
+
+        question_ids = [question["id"] for question in get_questions()]
+        random.shuffle(question_ids)
+        session["quiz"] = {
+            "question_ids": question_ids[:question_count],
+            "answers": [],
+            "index": 0,
+            "feedback": None,
+        }
+        return redirect(url_for("quiz_question"))
+
+    @app.route("/quiz/question", methods=["GET", "POST"])
+    def quiz_question():
+        quiz = session.get("quiz")
+        if not quiz:
+            flash("Start a quiz from Overview when you are ready.", "error")
+            return redirect(url_for("overview"))
+
+        question_ids = quiz["question_ids"]
+        current_index = quiz["index"]
+        if current_index >= len(question_ids):
+            return redirect(url_for("quiz_result"))
+        question = get_questions_by_ids([question_ids[current_index]])[0]
+
+        if request.method == "POST":
+            selected_choice = request.form.get("selected_choice", "").lower()
+            if selected_choice not in "abcd":
+                flash("Choose an answer before submitting.", "error")
+            else:
+                quiz["feedback"] = {
+                    "selected_choice": selected_choice,
+                    "is_correct": selected_choice == question["correct_choice"],
+                }
+                session["quiz"] = quiz
+                return render_template(
+                    "quiz_question.html",
+                    question=question,
+                    question_number=current_index + 1,
+                    total=len(question_ids),
+                    feedback=quiz["feedback"],
+                )
+
+        return render_template(
+            "quiz_question.html",
+            question=question,
+            question_number=current_index + 1,
+            total=len(question_ids),
+            feedback=quiz.get("feedback"),
+        )
+
+    @app.post("/quiz/next")
+    def next_question():
+        quiz = session.get("quiz")
+        if not quiz or not quiz.get("feedback"):
+            return redirect(url_for("quiz_question"))
+        quiz["answers"].append(quiz["feedback"]["selected_choice"])
+        quiz["index"] += 1
+        quiz["feedback"] = None
+        if quiz["index"] >= len(quiz["question_ids"]):
+            attempt_id = save_attempt(quiz["question_ids"], quiz["answers"])
+            session.pop("quiz", None)
+            session["last_attempt_id"] = attempt_id
+            return redirect(url_for("quiz_result"))
+        session["quiz"] = quiz
+        return redirect(url_for("quiz_question"))
+
+    @app.get("/quiz/result")
+    def quiz_result():
+        attempt_id = session.get("last_attempt_id")
+        attempt = get_attempt(attempt_id) if attempt_id else None
+        if not attempt:
+            flash("Complete a quiz before viewing results.", "error")
+            return redirect(url_for("overview"))
+        return render_template("quiz_result.html", attempt=attempt)
 
     @app.get("/question-bank")
     def question_bank():
@@ -91,16 +191,20 @@ def create_app() -> Flask:
     def cancel_import():
         session.pop("import_preview", None)
         session.pop("import_source", None)
-        flash("Import cancelled. Your question bank was not changed.", "success")
+        flash("Import cancelled. Your question bank was not changed.", "error")
         return redirect(url_for("question_bank"))
 
     @app.post("/question-bank/import/confirm")
     def confirm_import():
-        flash(
-            "Preview confirmed. Saving imported questions will be connected in the next build slice.",
-            "success",
-        )
-        return redirect(url_for("import_preview"))
+        preview_data = session.pop("import_preview", None)
+        source_name = session.pop("import_source", "uploaded PDF")
+        if not preview_data:
+            flash("There is no import preview to add.", "error")
+            return redirect(url_for("question_bank"))
+        questions = json.loads(preview_data)
+        added_count = add_questions(questions, source_name)
+        flash(f"Added {added_count} questions to your question bank.", "success")
+        return redirect(url_for("question_bank"))
 
     @app.route("/question-bank/manual", methods=["GET", "POST"])
     def manual_question():

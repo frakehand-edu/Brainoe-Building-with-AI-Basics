@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Quiz Result · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="narrow-content">
+  <p class="eyebrow">Quiz complete</p>
+  <h1>Nice work.</h1>
+  <section class="result-card panel">
+    <span class="stat-label">Your result</span>
+    <strong class="result-score">{{ attempt.correct_count }}/{{ attempt.question_count }}</strong>
+    <span class="result-percentage">{{ attempt.percentage|round|int }}% correct</span>
+    <p class="muted">Your result has been saved. History and detailed review will be connected next.</p>
+    <div class="form-actions">
+      <a class="button button-ghost" href="{{ url_for('overview') }}">Home</a>
+      <a class="button button-primary" href="{{ url_for('quiz_setup') }}">Another quiz</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

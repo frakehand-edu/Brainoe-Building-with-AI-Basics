@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Question {{ question_number }} · Exam-to-Quiz{% endblock %}
+{% block content %}
+<div class="quiz-shell">
+  <div class="quiz-progress"><span>Question {{ question_number }} of {{ total }}</span><span class="muted">{{ ((question_number / total) * 100)|round|int }}%</span></div>
+  <div class="progress-track"><span style="width: {{ (question_number / total) * 100 }}%"></span></div>
+  <section class="quiz-card panel">
+    <p class="eyebrow">Think it through</p>
+    <h1>{{ question.question_text }}</h1>
+    {% if feedback %}
+      <div class="feedback {{ 'feedback-success' if feedback.is_correct else 'feedback-error' }}">
+        <strong>{{ 'Correct!' if feedback.is_correct else 'Not quite.' }}</strong>
+        <p>The correct answer is <strong>{{ question.correct_choice|upper }}</strong>.</p>
+        <p>{{ question.explanation }}</p>
+      </div>
+      <form method="post" action="{{ url_for('next_question') }}"><button class="button button-primary button-large" type="submit">{{ 'Finish quiz' if question_number == total else 'Next question' }} <span aria-hidden="true">→</span></button></form>
+    {% else %}
+      <form method="post">
+        <div class="answer-options">
+          {% for letter, choice in [('a', question.choice_a), ('b', question.choice_b), ('c', question.choice_c), ('d', question.choice_d)] %}
+            <label class="answer-option"><input type="radio" name="selected_choice" value="{{ letter }}" required><span><b>{{ letter|upper }})</b> {{ choice }}</span></label>
+          {% endfor %}
+        </div>
+        <button class="button button-primary button-large" type="submit">Submit answer</button>
+      </form>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

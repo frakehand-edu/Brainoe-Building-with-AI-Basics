@@ -5,9 +5,14 @@
   <p class="eyebrow">Quiz me</p>
   <h1>Choose your quiz length</h1>
   <section class="panel empty-state">
-    <h2>Quiz setup is the next build slice</h2>
-    <p class="muted">You have {{ question_count }} questions ready. The 5, 10, and 15-question quiz controls will be connected next.</p>
-    <a class="button button-secondary" href="{{ url_for('question_bank') }}">Back to Question Bank</a>
+    <h2>You have {{ question_count }} questions ready</h2>
+    <p class="muted">Choose how many questions you want to answer.</p>
+    <form class="quiz-length-form" method="post">
+      {% for count in (5, 10, 15) %}
+        <label class="length-option"><input type="radio" name="question_count" value="{{ count }}" required><span>{{ count }} questions</span></label>
+      {% endfor %}
+      <button class="button button-primary button-large" type="submit">Start quiz</button>
+    </form>
   </section>
 </div>
 {% endblock %}

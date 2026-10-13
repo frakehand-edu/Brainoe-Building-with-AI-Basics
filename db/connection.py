@@ -31,6 +31,22 @@ def init_db(database_path: Path) -> None:
                 source_name TEXT NOT NULL,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
+            CREATE TABLE IF NOT EXISTS quiz_attempts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                question_count INTEGER NOT NULL,
+                correct_count INTEGER NOT NULL,
+                percentage REAL NOT NULL,
+                started_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                completed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS attempt_questions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                attempt_id INTEGER NOT NULL REFERENCES quiz_attempts(id),
+                question_id INTEGER NOT NULL REFERENCES questions(id),
+                question_order INTEGER NOT NULL,
+                selected_choice TEXT NOT NULL,
+                is_correct INTEGER NOT NULL
+            );
             """
         )
         connection.commit()

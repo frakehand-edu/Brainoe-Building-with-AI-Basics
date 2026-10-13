@@ -87,6 +87,37 @@ Explanation: The third answer is correct.
         self.assertIn(b"Which answer is correct?", response.data)
         self.assertNotIn(b"Which answer is correct?", self.client.get("/question-bank").data)
 
+    def test_confirmed_questions_can_complete_a_quiz(self):
+        for number in range(5):
+            self.client.post(
+                "/question-bank/manual",
+                data={
+                    "question_text": f"Question {number}",
+                    "choice_a": "First",
+                    "choice_b": "Second",
+                    "choice_c": "Third",
+                    "choice_d": "Fourth",
+                    "correct_choice": "a",
+                    "explanation": "First is correct.",
+                },
+            )
+        setup = self.client.post(
+            "/quiz/setup",
+            data={"question_count": "5"},
+            follow_redirects=True,
+        )
+        self.assertEqual(setup.status_code, 200)
+        for _ in range(5):
+            question = self.client.get("/quiz/question")
+            self.assertIn(b"Submit answer", question.data)
+            feedback = self.client.post(
+                "/quiz/question",
+                data={"selected_choice": "a"},
+            )
+            self.assertIn(b"The correct answer is", feedback.data)
+            next_response = self.client.post("/quiz/next", follow_redirects=True)
+        self.assertIn(b"5/5", next_response.data)
+
 
 if __name__ == "__main__":
     unittest.main()

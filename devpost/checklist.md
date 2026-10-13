@@ -84,3 +84,4 @@ Activity mode:
 
 - Slice 1 feedback changed the Overview **Quiz me** route to explain when fewer than five questions exist and added an interim setup page for the already-populated case; the full quiz setup remains in Slice 3 as planned. Visual feedback also added active navigation pills, a brain mark, stronger calendar spacing, and cream text on the Overview card.
 - Follow-up visual feedback enlarged and integrated the Overview card copy so it follows the card's angled presentation instead of looking like detached labels.
+- Slice 3 feedback keeps imported questions in insertion order, uses an error-colored cancellation notice, and adjusts quiz question/choice typography for readability.
