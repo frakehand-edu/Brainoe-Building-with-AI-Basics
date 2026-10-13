@@ -9,7 +9,7 @@ Build mode: learn
 
 ## Slices
 
-- [ ] **1. You can open the polished app and add a manual question**
+- [x] **1. You can open the polished app and add a manual question**
   Becomes usable: A running Flask app with Overview, Question Bank, and History navigation; a manual question can be saved and appears in the question bank.
   Why now: Bootstraps the full app and proves the first end-to-end path with a reliable data source before PDF parsing.
   PRD ref: `prd.md > The Core Journey` (steps 1-2), `prd.md > Features and Behavior > Adding and reviewing questions`
