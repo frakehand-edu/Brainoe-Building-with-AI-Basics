@@ -70,15 +70,15 @@ Build mode: learn
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence:
-Route and stops:
-Edit outcome:
-Reflection:
-Activity mode:
+Activity and evidence: Traced editable PDF import from the browser through `app.py > import_questions`, `services/question_parser.py > parse_questions`, `templates/import_preview.html`, and `app.py > edit_import_preview`; the 11-test suite passed, including `test_preview_edits_are_saved_before_confirmation`.
+Route and stops: Guided route completed through the import action, extraction/parser, editable preview, and confirmed SQLite save.
+Edit outcome: Learner performed the preview edit and confirmed the edited question was saved.
+Reflection: Learner observed that updating one feature requires inspecting the whole chain of connected code.
+Activity mode: Live app and editor.
 
 ## Revisions
 
