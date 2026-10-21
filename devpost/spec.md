@@ -3,7 +3,7 @@ doc: spec
 status: approved
 ---
 
-# Exam-to-Quiz — Technical Spec
+# Brainoe — Technical Spec
 
 ## How This Works, In Plain Language
 

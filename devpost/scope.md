@@ -3,7 +3,7 @@ doc: scope
 status: approved
 ---
 
-# Exam-to-Quiz
+# Brainoe
 
 Turn exam PDFs into a reusable quiz and feedback experience for active learning.
 

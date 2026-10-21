@@ -32,6 +32,8 @@ class AppSmokeTests(unittest.TestCase):
         for path in ("/", "/question-bank", "/history", "/question-bank/manual"):
             response = self.client.get(path)
             self.assertEqual(response.status_code, 200)
+            self.assertIn(b"Brainoe", response.data)
+            self.assertNotIn(b"Exam-to-Quiz", response.data)
 
     def test_manual_question_is_persisted(self):
         response = self.client.post(

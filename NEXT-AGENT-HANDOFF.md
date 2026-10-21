@@ -1,4 +1,4 @@
-# Exam-to-Quiz: Next Agent Handoff
+# Brainoe: Next Agent Handoff
 
 This project completed the Build With AI: Basics planning and build workflow. The current implementation is a working proof of concept. Continue normally after the hackathon: the limitations below are priorities and tradeoffs, not permanent restrictions.
 

@@ -3,7 +3,7 @@ doc: prd
 status: approved
 ---
 
-# Exam-to-Quiz — Product Requirements
+# Brainoe — Product Requirements
 
 Turn exam materials into a reusable MCQ practice and feedback experience for students.
 Source: `scope.md > The Unique Kernel`, `scope.md > The Core Loop`

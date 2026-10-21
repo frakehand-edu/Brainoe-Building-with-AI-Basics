@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Quiz Review · Exam-to-Quiz{% endblock %}
+{% block title %}Quiz Review · Brainoe{% endblock %}
 {% block content %}
 <div class="section-heading">
   <div><p class="eyebrow">Past quiz review</p><h1>{{ attempt.correct_count }}/{{ attempt.question_count }}</h1><p class="lede">{{ attempt.percentage|round|int }}% correct · {{ attempt.completed_at|replace('T', ' ') }}</p></div>

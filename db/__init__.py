@@ -1,1 +1,1 @@
-"""Database helpers for Exam-to-Quiz."""
+"""Database helpers for Brainoe."""
